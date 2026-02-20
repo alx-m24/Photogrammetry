@@ -39,3 +39,10 @@ ffmpeg.exe -threads 0               \
            -fps_mode passthrough    \
            -q:v 3                   \
           "${outputPath}/frames/%04d.png"
+
+photogrammetryPath="./build/windows/debug/Photogrammetry.exe"
+photogrammetryPath=$(realpath "$photogrammetryPath")
+
+echo "Running: ${photogrammetryPath}"
+
+"${photogrammetryPath}"
