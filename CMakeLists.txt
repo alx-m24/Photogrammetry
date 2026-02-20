@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Add the library
 add_executable(${PROJECT_NAME}
     src/main.cpp
+    src/shader/shader.cpp
     src/thirdParty/stb.cpp
 )
 
