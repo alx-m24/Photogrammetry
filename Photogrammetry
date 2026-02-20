@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" || -z "$2" ]]; then
+    echo "Usage: Photogrammetry <VideoPath> <OutputPath>"
+    exit 1
+fi
+
+if [[ ! -e "$1" ]]; then
+    echo "File does not exist: $1"
+    exit 1
+fi
+
+videoPath=$(realpath "$1")
+outputPath=$(realpath "$2")
+
+ffmpegPath=$(command -v ffmpeg)
+
+if [[ -z "$ffmpegPath" ]]; then
+    ffmpegPath=$(command -v ffmpeg.exe)
+fi
+
+if [[ -z "$ffmpegPath" ]]; then
+    echo "ffmpeg not found"
+    exit 1
+fi
+
+echo "Using ${ffmpegPath} for pre-processing"
+
+if ! "$ffmpegPath" -v error -i "$videoPath" -f null - &>/dev/null; then
+    echo "$videoPath is not a valid video"
+    exit 1
+fi
+
+mkdir -p "${outputPath}/frames"
+
+ffmpeg.exe -threads 0               \
+           -i "${videoPath}"        \
+           -vf "scale=1280:-1"      \
+           -fps_mode passthrough    \
+           -q:v 3                   \
+          "${outputPath}/frames/%04d.png"
